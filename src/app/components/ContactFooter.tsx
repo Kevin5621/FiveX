@@ -1,3 +1,5 @@
+'use client';
+
 import { Twitter, Instagram, Github, Mail } from 'lucide-react';
 
 export default function ContactFooter() {
