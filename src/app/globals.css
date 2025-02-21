@@ -21,3 +21,31 @@
                       linear-gradient(to bottom, #ffffff1a 1px, transparent 1px);
   }
 }
+
+/* Custom Scrollbar Neo-Brutalism Style */
+::-webkit-scrollbar {
+  width: 16px;
+  background: #ffffff;
+  border: 3px solid #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FF3366;
+  border: 3px solid #000000;
+  box-shadow: 4px 4px 0 #000000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff1a53;
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-left: 3px solid #000000;
+}
+
+/* Untuk Firefox */
+* {
+  scrollbar-width: thick;
+  scrollbar-color: #FF3366 #ffffff;
+}
