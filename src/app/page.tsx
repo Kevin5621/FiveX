@@ -1,7 +1,11 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Menu, X, ArrowRight, Camera, Video, Mail, Github, Twitter, Instagram } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-function App() {
+export default function Home() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
@@ -20,18 +24,18 @@ function App() {
               </button>
             </div>
             <div className="hidden md:flex space-x-8 text-lg">
-              <a href="#services" className="hover:text-[#40E0D0] transition-colors">SERVICES</a>
-              <a href="#work" className="hover:text-[#40E0D0] transition-colors">WORK</a>
-              <a href="#contact" className="hover:text-[#40E0D0] transition-colors">CONTACT</a>
+              <Link href="#services" className="hover:text-[#40E0D0] transition-colors">SERVICES</Link>
+              <Link href="#work" className="hover:text-[#40E0D0] transition-colors">WORK</Link>
+              <Link href="#contact" className="hover:text-[#40E0D0] transition-colors">CONTACT</Link>
             </div>
           </div>
         </div>
         {/* Mobile menu */}
         <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'} border-t-4 border-white`}>
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <a href="#services" className="block px-3 py-2 text-lg hover:bg-[#FF3366]">SERVICES</a>
-            <a href="#work" className="block px-3 py-2 text-lg hover:bg-[#FF3366]">WORK</a>
-            <a href="#contact" className="block px-3 py-2 text-lg hover:bg-[#FF3366]">CONTACT</a>
+            <Link href="#services" className="block px-3 py-2 text-lg hover:bg-[#FF3366]">SERVICES</Link>
+            <Link href="#work" className="block px-3 py-2 text-lg hover:bg-[#FF3366]">WORK</Link>
+            <Link href="#contact" className="block px-3 py-2 text-lg hover:bg-[#FF3366]">CONTACT</Link>
           </div>
         </div>
       </nav>
@@ -83,17 +87,19 @@ function App() {
           <h2 className="text-6xl font-black mb-16">WORK</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?auto=format&fit=crop&w=800&q=80",
-              "https://images.unsplash.com/photo-1542744095-291d1f67b221?auto=format&fit=crop&w=800&q=80",
-              "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80",
-              "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
-              "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=800&q=80",
-              "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=800&q=80"
+              // "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?auto=format&fit=crop&w=800&q=80",
+              // "https://images.unsplash.com/photo-1542744095-291d1f67b221?auto=format&fit=crop&w=800&q=80",
+              // "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80",
+              // "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
+              // "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=800&q=80",
+              // "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?auto=format&fit=crop&w=800&q=80"
             ].map((src, i) => (
               <div key={i} className="group relative border-4 border-white overflow-hidden">
-                <img
+                <Image
                   src={src}
                   alt={`Portfolio work ${i + 1}`}
+                  width={800}
+                  height={800}
                   className="w-full aspect-square object-cover transition-transform group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-[#FF3366] bg-opacity-0 group-hover:bg-opacity-90 transition-all flex items-center justify-center">
@@ -170,5 +176,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
