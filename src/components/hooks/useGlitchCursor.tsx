@@ -13,21 +13,16 @@ export const useGlitchCursor = () => {
 
     const updateCursorPosition = (e: MouseEvent) => {
       try {
-        // Validasi nilai koordinat
         const x = Number.isFinite(e.clientX) ? e.clientX : lastValidX;
         const y = Number.isFinite(e.clientY) ? e.clientY : lastValidY;
-
-        // Update last valid position
+    
         lastValidX = x;
         lastValidY = y;
-
-        // Update cursor position
-        cursor.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-
-        // Cek element di bawah cursor
+    
+        cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    
         const element = document.elementFromPoint(x, y);
         
-        // Update cursor style
         if (element) {
           const isInteractive = 
             element.tagName === 'A' || 
@@ -35,18 +30,28 @@ export const useGlitchCursor = () => {
             element.closest('a') ||
             element.closest('button') ||
             element.closest('[role="button"]') ||
+            element.closest('.force-cursor-teal') || // Add force-cursor-teal check
             getComputedStyle(element).cursor === 'pointer';
-
+    
           if (isInteractive) {
             cursor.classList.add('pointer');
+            
+            // Always add pointer-teal for force-cursor-teal elements
+            if (element.closest('.force-cursor-teal')) {
+              cursor.classList.add('pointer-teal');
+              cursor.classList.remove('pointer-red');
+            }
+            // Remove previous hover effect checks since we want all teal
+            else {
+              cursor.classList.remove('pointer-teal', 'pointer-red');
+            }
           } else {
-            cursor.classList.remove('pointer');
+            cursor.classList.remove('pointer', 'pointer-teal', 'pointer-red');
           }
         }
       } catch (error) {
         console.error('Cursor update error:', error);
-        // Fallback ke posisi terakhir yang valid
-        cursor.style.transform = `translate(${lastValidX}px, ${lastValidY}px) translate(-50%, -50%)`;
+        cursor.style.transform = `translate3d(${lastValidX}px, ${lastValidY}px, 0)`;
       }
     };
 
