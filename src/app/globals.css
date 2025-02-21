@@ -20,6 +20,18 @@
     background-image: linear-gradient(to right, #ffffff1a 1px, transparent 1px),
                       linear-gradient(to bottom, #ffffff1a 1px, transparent 1px);
   }
+
+  .shadow-neo {
+    box-shadow: 8px 8px 0 0 black;
+  }
+
+  .shadow-neo-dark {
+    box-shadow: 8px 8px 0 0 #4A4A4A;
+  }
+
+  .hover\:shadow-neo-hover:hover {
+    box-shadow: 12px 12px 0 0 black;
+  }
 }
 
 /* Custom Scrollbar Neo-Brutalism Style */
