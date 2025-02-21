@@ -18,7 +18,7 @@ export default function VideoProduction() {
         <div className="max-w-7xl mx-auto px-4 h-20 flex items-center">
           <Link 
             href="/" 
-            className="flex items-center hover:bg-[#FF3366] hover:text-white p-3 border-4 border-white transition-colors group"
+            className="force-cursor-teal flex items-center hover:bg-[#FF3366] hover:text-white p-3 border-4 border-white transition-colors group"
           >
             <ArrowLeft className="mr-2 group-hover:transform group-hover:-translate-x-2 transition-transform" />
             BACK TO HOME
@@ -104,7 +104,7 @@ export default function VideoProduction() {
         <div className="max-w-7xl mx-auto">
           <div className="border-8 border-white p-12 hover:bg-[#FF3366] transition-colors transform hover:translate-x-4 hover:translate-y-4 shadow-neo group">
             <h2 className="text-4xl font-black mb-6">READY TO START YOUR PROJECT?</h2>
-            <button className="bg-white text-[#4A4A4A] px-8 py-4 font-black text-xl border-4 border-[#4A4A4A] 
+            <button className="force-cursor-teal bg-white text-[#4A4A4A] px-8 py-4 font-black text-xl border-4 border-[#4A4A4A] 
                            hover:bg-[#4A4A4A] hover:text-white transition-colors transform hover:-translate-y-2 shadow-neo">
               GET IN TOUCH
             </button>
