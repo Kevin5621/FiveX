@@ -1,7 +1,7 @@
 'use client';
 
+import { useScrollToSection } from '@/components/hooks/useScrollToSection';
 import { ArrowRight } from 'lucide-react';
-import { useScrollToSection } from './hooks/useScrollToSection';
 
 export default function Hero() {
   const { scrollToSection } = useScrollToSection();

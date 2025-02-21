@@ -1,8 +1,8 @@
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import Work from './components/Work';
-import ContactFooter from './components/ContactFooter';
-import Services from './components/Services';
+import Navbar from './navbar/Navbar';
+import Work from './work/Work';
+import ContactFooter from './footer/ContactFooter';
+import Services from './services/Services';
+import Hero from './landing page/Hero';
 
 export default function Home() {
   return (

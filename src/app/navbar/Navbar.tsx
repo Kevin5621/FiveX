@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Menu, X } from 'lucide-react';
-import { useScrollToSection } from './hooks/useScrollToSection';
+import { useScrollToSection } from '../../components/hooks/useScrollToSection';
 
 export default function Navbar() {
   const { scrollToSection, isOpen, setIsOpen } = useScrollToSection();
