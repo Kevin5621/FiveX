@@ -48,4 +48,41 @@
 * {
   scrollbar-width: thick;
   scrollbar-color: #FF3366 #ffffff;
+  cursor: none !important;
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border: 2px solid black;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  box-shadow: 2px 2px 0 black;
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+  will-change: transform;
+  left: 0;
+  top: 0;
+}
+
+/* Pointer style */
+.custom-cursor.pointer {
+  width: 30px;
+  height: 30px;
+  background: #FF3366;
+  border: 2px solid white;
+  box-shadow: 3px 3px 0 black;
+  left: 0;
+  top: 0;
+}
+
+/* Text selection style */
+.custom-cursor.text {
+  width: 8px;
+  height: 24px;
+  background: #40E0D0;
+  border: none;
+  box-shadow: none;
 }
