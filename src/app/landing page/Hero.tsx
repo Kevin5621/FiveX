@@ -1,91 +1,137 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useScrollToSection } from '@/components/hooks/useScrollToSection';
-import { ArrowRight, MousePointer, ChevronDown } from 'lucide-react';
+import { ArrowRight, MousePointer, ChevronDown, X, Circle, Square } from 'lucide-react';
 
 const Hero = () => {
   const { scrollToSection } = useScrollToSection();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [glitchActive, setGlitchActive] = useState(false);
   
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
+    
+    const glitchInterval = setInterval(() => {
+      setGlitchActive(true);
+      setTimeout(() => setGlitchActive(false), 200);
+    }, 5000);
+    
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearInterval(glitchInterval);
+    };
   }, []);
 
   return (
-    <section className="pt-32 pb-20 px-4 relative overflow-hidden bg-[#4A4A4A]">
-      {/* Animated background grid */}
-      <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-8 gap-4 opacity-10">
-        {Array(32).fill(null).map((_, i) => (
+    <section className="relative min-h-screen bg-white text-black overflow-hidden">
+      {/* Raw grid background */}
+      <div className="absolute inset-0 grid grid-cols-6 md:grid-cols-12 grid-rows-6 gap-1 pointer-events-none">
+        {Array(72).fill(null).map((_, i) => (
           <div
             key={i}
-            className="border-2 border-white transform transition-transform duration-700"
-            style={{
-              transform: `rotate(${Math.sin((mousePosition.x + mousePosition.y + i * 100) / 1000) * 5}deg)`
-            }}
+            className={`border border-black opacity-10 ${i % 7 === 0 ? 'bg-yellow-400' : i % 5 === 0 ? 'bg-red-500' : ''}`}
           />
         ))}
       </div>
-
-      {/* Main content */}
-      <div className="max-w-7xl mx-auto relative">
-        {/* Glitch effect on hover */}
-        <div className="relative">
-          <h1 
-            className="text-[clamp(60px,10vw,120px)] font-black leading-none uppercase transition-all duration-300"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <span className={`block relative ${isHovered ? 'hover:text-customRed hover:-translate-x-1' : ''}`}>
-            DIGITAL
+      
+      {/* Floating geometric elements */}
+      <div className="absolute top-1/4 right-8 w-24 h-24 bg-red-500 rotate-12 shadow-xl" />
+      <div className="absolute bottom-1/3 left-12 w-20 h-20 bg-blue-600 -rotate-6 shadow-xl" />
+      <div className="absolute top-2/3 right-1/4 w-16 h-16 bg-yellow-400 rotate-45 shadow-xl" />
+      
+      {/* Main content container with offset */}
+      <div className="max-w-7xl mx-auto px-4 pt-24 pb-20 relative">
+        {/* Heading with raw, unpolished style */}
+        <div 
+          className={`relative mb-16 ${glitchActive ? 'translate-x-1 -translate-y-1' : ''} transition-transform duration-100`}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <h1 className="font-black uppercase leading-none tracking-tighter">
+            <span className="block text-[clamp(50px,15vw,180px)] relative">
+              <span className={`block ${isHovered ? '-translate-x-2 text-red-600' : ''} transition-all duration-300`}>
+                FIVE X
+              </span>
+              {/* Underline graphic element */}
+              <div className={`h-3 bg-black w-4/5 mt-2 ${isHovered ? 'ml-8' : ''} transition-all duration-300`}></div>
             </span>
-            <span className={`block relative ${isHovered ? 'hover:text-customBlue hover:translate-x-1' : ''}`}>
+            
+            <span className={`block text-[clamp(50px,15vw,180px)] -mt-6 relative ${isHovered ? 'translate-x-6' : ''} transition-all duration-300`}>
               AGENCY
+              {/* Brutalist element */}
+              <Square className="absolute -right-12 top-1/2 -translate-y-1/2 fill-yellow-400 stroke-black stroke-2" size={40} />
             </span>
-            <span className={`block relative ${isHovered ? 'hover:text-green-500 hover:-translate-y-1' : ''}`}>
+            
+            <span className={`block text-[clamp(30px,8vw,100px)] relative italic bg-black text-white px-4 py-2 w-fit ${isHovered ? '-translate-y-4 rotate-1' : ''} transition-all duration-300`}>
               REDEFINED
+              <X className="absolute -right-12 top-1/2 -translate-y-1/2 stroke-red-500 stroke-[3]" size={32} />
             </span>
           </h1>
+          
+          {/* Glitch elements that appear on hover */}
+          {isHovered && (
+            <>
+              <div className="absolute -left-4 top-1/4 w-2 h-16 bg-red-500"></div>
+              <div className="absolute -right-4 bottom-1/4 w-2 h-24 bg-blue-600"></div>
+              <div className="absolute -bottom-2 right-1/3 w-20 h-2 bg-yellow-400"></div>
+            </>
+          )}
         </div>
 
-        {/* Animated description */}
-        <p className="mt-8 text-xl max-w-2xl relative border-l-4 border-white pl-4 transform hover:scale-105 transition-transform">
-          We create bold digital experiences that push boundaries and deliver results.
-          <MousePointer className="absolute -right-8 top-1/2 -translate-y-1/2 animate-bounce" size={20} />
-        </p>
+        {/* Raw, unpolished description */}
+        <div className="relative mb-16 max-w-2xl ml-6 md:ml-16">
+          <div className="absolute -left-6 top-0 bottom-0 w-2 bg-black"></div>
+          <p className="text-xl md:text-2xl font-mono">
+            We create bold digital experiences that 
+            <span className="relative inline-block mx-2 px-1 bg-yellow-400 -rotate-1 font-black">
+              PUSH BOUNDARIES
+            </span> 
+            and deliver results.
+          </p>
+          
+          {/* Cursor indicator with raw style */}
+          <div className="absolute -right-8 top-1/2 flex items-center space-x-2">
+            <MousePointer className="animate-pulse" size={20} />
+            <div className="h-px w-12 bg-black"></div>
+          </div>
+        </div>
 
-        {/* Enhanced CTA button */}
-        <div className="mt-12 flex flex-col md:flex-row gap-6 items-start">
+        {/* Brutalist CTA section */}
+        <div className="mt-12 flex flex-col md:flex-row gap-8 items-start ml-6 md:ml-16">
           <button 
             onClick={() => scrollToSection('contact')}
-            className="group relative border-4 border-white px-8 py-4 text-xl font-bold 
-                     hover:bg-white hover:text-[#4A4A4A] transition-all duration-300
-                     active:scale-95 transform hover:-translate-y-1"
+            className="group relative px-10 py-6 bg-black text-white text-xl font-black uppercase 
+                     hover:-translate-y-2 hover:translate-x-2 active:translate-y-0 active:translate-x-0
+                     transition-all duration-300 shadow-[8px_8px_0px_0px_rgba(239,68,68,1)]
+                     hover:shadow-[12px_12px_0px_0px_rgba(239,68,68,1)]"
           >
             <span className="relative z-10 flex items-center">
               GET IN TOUCH
-              <ArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight className="ml-2 group-hover:translate-x-3 transition-transform" size={24} />
             </span>
-            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity -z-0" />
           </button>
 
-          {/* Scroll indicator */}
-          <div className="hidden md:flex items-center gap-4 text-sm opacity-60">
+          {/* Raw scroll indicator */}
+          <div className="hidden md:flex items-center gap-4 text-sm font-mono border-2 border-black p-3">
             <ChevronDown className="animate-bounce" />
-            <span>Scroll to explore</span>
+            <span>SCROLL DOWN</span>
           </div>
         </div>
       </div>
-
-      {/* Decorative elements */}
-      <div className="absolute top-10 right-10 w-20 h-20 border-4 border-white rotate-45 opacity-20 
-                    animate-[spin_10s_linear_infinite]" />
-      <div className="absolute bottom-10 left-10 w-16 h-16 border-4 border-white -rotate-12 opacity-20 
-                    animate-[bounce_4s_ease-in-out_infinite]" />
+      
+      {/* Signature brutalist elements */}
+      <div className="absolute bottom-8 right-8 font-mono text-xs flex items-center">
+        <Circle fill="black" size={8} className="mr-2" />
+        <span>RAW_DESIGN.2025</span>
+      </div>
+      
+      {/* Offset horizontal lines */}
+      <div className="absolute left-0 right-0 h-px bg-black top-12 opacity-30"></div>
+      <div className="absolute left-0 right-0 h-px bg-black bottom-12 opacity-30"></div>
     </section>
   );
 };
