@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Video, Camera, ArrowUpRight, Play, Image } from 'lucide-react';
+import { Video, Camera, ArrowUpRight, Play, Image, Code, Globe, Server } from 'lucide-react';
 import Link from 'next/link';
 
 const ServiceCard = ({ 
@@ -8,14 +8,14 @@ const ServiceCard = ({
   icon: Icon,
   title,
   description, 
-  hoverColor,
+  accentColor,
   className
 }: {
   href: string;
   icon: React.ElementType;
   title: string;
   description: string;
-  hoverColor: string;
+  accentColor: string;
   className?: string;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -23,50 +23,77 @@ const ServiceCard = ({
   return (
     <Link href={href}>
       <div 
-        className={`relative border-4 border-[#4A4A4A] p-8 transition-all duration-300 
-                   group cursor-pointer h-full transform hover:-translate-y-2
-                   hover:shadow-[8px_8px_0px_0px_#000] ${className}`}
+        className={`relative border-4 border-black p-8 transition-all duration-300 
+                   group cursor-pointer h-full bg-white text-black
+                   hover:shadow-[8px_8px_0_0_${accentColor}] ${className}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={{
-          backgroundColor: isHovered ? hoverColor : 'white',
-          borderColor: isHovered ? hoverColor : '#4A4A4A',
-          color: isHovered ? 'white' : '#4A4A4A'
-        }}
       >
-        {/* Corner Decoration */}
-        <div className="absolute top-0 right-0 w-12 h-12 border-b-4 border-l-4 border-[#4A4A4A] 
-                      group-hover:border-white transition-colors" />
+        {/* Neo-brutalist asymmetric decorative element */}
+        <div 
+          className={`absolute top-0 right-0 w-4 h-20 transition-all duration-300`}
+          style={{ backgroundColor: accentColor }}
+        />
         
-        {/* Icon with animation */}
-        <div className="relative">
-          <Icon size={48} className="mb-6 transform group-hover:scale-110 transition-transform" />
+        {/* Icon with brutalist animation */}
+        <div className="relative mb-8">
+          <Icon 
+            size={48} 
+            className={`transition-transform duration-300 ${isHovered ? 'translate-x-2 -translate-y-2' : ''}`}
+          />
           <ArrowUpRight 
             size={24} 
-            className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 
-                       transform -translate-x-8 translate-y-8 group-hover:translate-x-0 
-                       group-hover:translate-y-0 transition-all duration-300"
+            className={`absolute top-0 right-4 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
           />
         </div>
 
-        {/* Content */}
-        <h3 className="text-3xl font-bold mb-4 tracking-tight">{title}</h3>
-        <p className="text-lg">{description}</p>
+        {/* Raw, unpolished content with bold typography */}
+        <h3 className="text-3xl font-black mb-4 tracking-tight">{title}</h3>
+        <p className="text-lg font-mono">{description}</p>
 
-        {/* Service-specific icons */}
-        <div className="mt-8 flex gap-4 opacity-60">
-          {title === "VIDEO PRODUCTION" ? (
+        {/* Service-specific icons with brutalist styling */}
+        <div className="mt-8 flex gap-4">
+          {title === "VIDEO PRODUCTION" && (
             <>
-              <Play size={20} className="group-hover:animate-bounce" />
-              <Video size={20} className="group-hover:animate-pulse" />
+              <div className="p-2 border-2 border-black">
+                <Play size={16} />
+              </div>
+              <div className="p-2 border-2 border-black">
+                <Video size={16} />
+              </div>
             </>
-          ) : (
+          )}
+          {title === "PHOTOGRAPHY" && (
             <>
-              <Camera size={20} className="group-hover:animate-bounce" />
-              <Image size={20} className="group-hover:animate-pulse" />
+              <div className="p-2 border-2 border-black">
+                <Camera size={16} />
+              </div>
+              <div className="p-2 border-2 border-black">
+                <Image size={16} />
+              </div>
+            </>
+          )}
+          {title === "WEBSITE DEVELOPMENT" && (
+            <>
+              <div className="p-2 border-2 border-black">
+                <Code size={16} />
+              </div>
+              <div className="p-2 border-2 border-black">
+                <Globe size={16} />
+              </div>
+              <div className="p-2 border-2 border-black">
+                <Server size={16} />
+              </div>
             </>
           )}
         </div>
+        
+        {/* Neo-brutalist decorative element that appears on hover */}
+        <div 
+          className={`absolute bottom-8 left-2 w-16 h-2 transition-all duration-300
+                    ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+          style={{ backgroundColor: accentColor }}
+        />
       </div>
     </Link>
   );
@@ -74,33 +101,38 @@ const ServiceCard = ({
 
 export default function Services() {
   return (
-    <section id="services" className="py-20 px-4 bg-white text-[#4A4A4A] relative">
-      {/* Background Grid Pattern */}
-      <div className="absolute inset-0 grid grid-cols-8 md:grid-cols-12 gap-4 opacity-5 pointer-events-none">
-        {Array(96).fill(null).map((_, i) => (
-          <div key={i} className="border border-[#4A4A4A]" />
+    <section id="services" className="py-24 px-4 bg-white text-black relative">
+      {/* Raw grid background in neo-brutalist style */}
+      <div className="absolute inset-0 grid grid-cols-6 md:grid-cols-12 gap-1 opacity-10 pointer-events-none">
+        {Array(72).fill(null).map((_, i) => (
+          <div 
+            key={i} 
+            className={`border border-black ${i % 7 === 0 ? 'bg-yellow-400' : i % 11 === 0 ? 'bg-red-500' : ''}`} 
+          />
         ))}
       </div>
 
       <div className="max-w-7xl mx-auto relative">
-        {/* Section Header */}
-        <div className="mb-16 relative">
-          <h2 className="text-6xl md:text-7xl font-black relative z-10">
+        {/* Neo-brutalist section header */}
+        <div className="mb-20 relative">
+          <h2 className="text-7xl md:text-8xl font-black uppercase tracking-tighter relative z-10">
             SERVICES
           </h2>
-          <div className="absolute -top-4 -left-4 w-20 h-20 border-8 border-[#4A4A4A] 
-                        opacity-10 transform -rotate-6" />
+          <div className="h-4 w-48 bg-black mt-4" />
+          
+          {/* Brutalist decorative elements */}
+          <div className="absolute -top-6 -left-6 w-12 h-12 bg-yellow-400 z-0" />
+          <div className="absolute -bottom-4 right-1/4 w-8 h-8 bg-red-500 z-0" />
         </div>
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+        {/* Services Grid with brutalist layout */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
           <ServiceCard 
-            className="force-cursor-teal"
             href="/services/video-production"
             icon={Video}
             title="VIDEO PRODUCTION"
             description="Cinematic storytelling that captures attention and drives engagement. Transform your vision into compelling visual narratives."
-            hoverColor="#FF3366"
+            accentColor="#FF3366"
           />
           
           <ServiceCard 
@@ -108,13 +140,26 @@ export default function Services() {
             icon={Camera}
             title="PHOTOGRAPHY"
             description="Striking visuals that communicate your brand's unique story. Create lasting impressions through powerful imagery."
-            hoverColor="#40E0D0"
+            accentColor="#40E0D0"
+          />
+          
+          <ServiceCard 
+            href="/services/web-development"
+            icon={Code}
+            title="WEBSITE DEVELOPMENT"
+            description="Bold, functional websites that break conventions. We build digital experiences that stand out"
+            accentColor="#FFD700"
           />
         </div>
 
-        {/* Decorative Elements */}
-        <div className="absolute -bottom-10 right-0 w-24 h-24 border-8 border-[#4A4A4A] 
-                      opacity-10 transform rotate-12" />
+        {/* Neo-brutalist decorative elements */}
+        <div className="absolute -bottom-12 right-8 w-20 h-4 bg-black" />
+        <div className="absolute -bottom-8 right-36 w-4 h-20 bg-black" />
+        
+        {/* Raw design signature */}
+        <div className="mt-24 font-mono text-xs flex justify-end items-center opacity-50">
+          <span>RAW_DESIGN.2025</span>
+        </div>
       </div>
     </section>
   );
