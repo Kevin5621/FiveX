@@ -48,9 +48,9 @@ export default function ContactFooter() {
           <div className="grid md:grid-cols-2 gap-16">
             {/* Left Column */}
             <div className="relative">
-              <p className="text-xl mb-12 border-l-4 border-[#4A4A4A] pl-6">
+              <div className="text-xl mb-12 border-l-4 border-[#4A4A4A] pl-6">
                 Ready to start your next project? Send us a message and let&apos;s create something amazing together.
-              </p>
+              </div>
               
               <div className="space-y-8">
                 {socialLinks.map(({ icon: Icon, href, label }) => (
@@ -128,12 +128,12 @@ export default function ContactFooter() {
       {/* Footer */}
       <footer className="py-8 px-4 border-t-4 border-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <p className="text-lg relative group cursor-pointer">
+          <div className="text-lg relative group cursor-pointer">
             © 2025 FiveX
             <span className="ml-2 text-sm opacity-60">All rights reserved.</span>
             <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white 
                           group-hover:w-full transition-all duration-300" />
-          </p>
+          </div>
           
           <a href="mailto:hello@fivex.agency" 
              className="mt-4 md:mt-0 flex items-center hover:text-[#40E0D0] transition-colors group">

@@ -38,10 +38,10 @@ export default function Photography() {
             </div>
           </div>
           <div className="border-8 border-white p-8 bg-[#40E0D0] transform hover:translate-x-4 hover:translate-y-4 transition-transform shadow-neo">
-            <p className="text-xl text-[#4A4A4A] font-bold">
+            <div className="text-xl text-[#4A4A4A] font-bold">
               We capture moments that matter. Our photography services combine technical excellence
               with creative vision to deliver stunning visual results.
-            </p>
+            </div>
           </div>
         </div>
       </section>
@@ -60,7 +60,7 @@ export default function Photography() {
             >
               <service.icon size={48} className="mb-6 group-hover:scale-110 transition-transform" />
               <h3 className="text-2xl font-black mb-4">{service.title}</h3>
-              <p className="font-bold">{service.desc}</p>
+              <div className="font-bold">{service.desc}</div>
             </div>
           ))}
         </div>

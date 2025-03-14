@@ -85,13 +85,13 @@ const Hero = () => {
         {/* Raw, unpolished description */}
         <div className="relative mb-16 max-w-2xl ml-6 md:ml-16">
           <div className="absolute -left-6 top-0 bottom-0 w-2 bg-black"></div>
-          <p className="text-xl md:text-2xl font-mono">
+          <div className="text-xl md:text-2xl font-mono">
             We create bold digital experiences that 
             <span className="relative inline-block mx-2 px-1 bg-yellow-400 -rotate-1 font-black">
               PUSH BOUNDARIES
             </span> 
             and deliver results.
-          </p>
+          </div>
           
           {/* Cursor indicator with raw style */}
           <div className="absolute -right-8 top-1/2 flex items-center space-x-2">

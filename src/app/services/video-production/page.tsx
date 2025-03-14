@@ -38,10 +38,10 @@ export default function VideoProduction() {
             </div>
           </div>
           <div className="border-8 border-white p-8 bg-[#FF3366] transform hover:translate-x-4 hover:translate-y-4 transition-transform shadow-neo">
-            <p className="text-xl font-bold">
+            <div className="text-xl font-bold">
               We create compelling video content that tells your story and engages your audience.
               From concept to final delivery, we handle every aspect of video production.
-            </p>
+            </div>
           </div>
         </div>
       </section>
@@ -60,7 +60,7 @@ export default function VideoProduction() {
             >
               <service.icon size={48} className="mb-6 group-hover:scale-110 transition-transform" />
               <h3 className="text-2xl font-black mb-4">{service.title}</h3>
-              <p className="font-bold">{service.desc}</p>
+              <div className="font-bold">{service.desc}</div>
             </div>
           ))}
         </div>
@@ -90,7 +90,7 @@ export default function VideoProduction() {
                   </span>
                   <div>
                     <h3 className="text-2xl font-black mb-2">{item.title}</h3>
-                    <p className="text-lg font-bold">{item.desc}</p>
+                    <div className="text-lg font-bold">{item.desc}</div>
                   </div>
                 </div>
               </div>

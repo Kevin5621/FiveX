@@ -49,7 +49,7 @@ const ServiceCard = ({
 
         {/* Raw, unpolished content with bold typography */}
         <h3 className="text-3xl font-black mb-4 tracking-tight">{title}</h3>
-        <p className="text-lg font-mono">{description}</p>
+        <div className="text-lg font-mono">{description}</div>
 
         {/* Service-specific icons with brutalist styling */}
         <div className="mt-8 flex gap-4">
