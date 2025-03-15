@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Twitter, Instagram, Github, Mail, Send, Loader2, ArrowRight, ExternalLink } from 'lucide-react';
+import { MessageSquare, Instagram, Github, Linkedin, Mail, Send, Loader2, ArrowUpRight, Triangle, Circle } from 'lucide-react';
 
 export default function ContactFooter() {
   const [formState, setFormState] = useState({
@@ -9,7 +9,8 @@ export default function ContactFooter() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeField, setActiveField] = useState<string | null>(null);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [activeSocial, setActiveSocial] = useState<string | null>(null);
 
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -21,131 +22,251 @@ export default function ContactFooter() {
   };
 
   const socialLinks = [
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Github, href: '#', label: 'Github' }
+    { icon: MessageSquare, href: '#', label: 'DISCORD', color: '#5865F2' },
+    { icon: Instagram, href: '#', label: 'INSTAGRAM', color: '#E1306C' },
+    { icon: Github, href: '#', label: 'GITHUB', color: '#6e5494' },
+    { icon: Linkedin, href: '#', label: 'LINKEDIN', color: '#0077B5' }
   ];
 
   return (
     <>
-      <section id="contact" className="py-20 px-4 bg-[#40E0D0] text-[#4A4A4A] relative">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 grid grid-cols-6 md:grid-cols-12 gap-4 opacity-5 pointer-events-none">
-          {Array(72).fill(null).map((_, i) => (
-            <div key={i} className="border-2 border-[#4A4A4A]" />
+      <section id="contact" className="py-32 px-4 bg-zinc-900 text-white relative">
+        {/* Diagonal grid background */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden">
+          {Array(24).fill(null).map((_, i) => (
+            <div 
+              key={i} 
+              className="absolute h-px bg-white w-screen"
+              style={{ 
+                top: `${i * 40}px`, 
+                transform: 'rotate(45deg) translateX(-50%)', 
+                left: '50%',
+                width: '200vw'
+              }} 
+            />
+          ))}
+          {Array(24).fill(null).map((_, i) => (
+            <div 
+              key={`v-${i}`} 
+              className="absolute w-px bg-white h-screen"
+              style={{ 
+                left: `${i * 40}px`, 
+                transform: 'rotate(45deg) translateY(-50%)', 
+                top: '50%',
+                height: '200vh' 
+              }} 
+            />
           ))}
         </div>
 
         <div className="max-w-7xl mx-auto relative">
-          {/* Section Header */}
-          <div className="relative mb-16">
-            <h2 className="text-6xl md:text-7xl font-black">
-              GET IN TOUCH
-              <div className="absolute -top-4 -left-4 w-20 h-20 border-8 border-[#4A4A4A] opacity-10 rotate-12" />
+          {/* Offset section header with stacked text effect */}
+          <div className="relative mb-24">
+            <h2 className="text-8xl md:text-9xl font-black uppercase relative z-10 tracking-tighter">
+              CONTACT
             </h2>
+            <div className="text-8xl md:text-9xl font-black uppercase absolute -top-3 -left-3 z-0 text-transparent 
+                           stroke-white stroke-2 opacity-30 tracking-tighter">
+              CONTACT
+            </div>
+            <div className="h-8 w-32 bg-red-500 mt-2 ml-2" />
+            
+            {/* Brutalist decorative elements */}
+            <Circle className="absolute top-6 right-16 fill-yellow-400" size={24} />
+            <div className="absolute -bottom-6 right-1/3 w-24 h-3 bg-blue-500 z-0" />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-16">
-            {/* Left Column */}
-            <div className="relative">
-              <div className="text-xl mb-12 border-l-4 border-[#4A4A4A] pl-6">
-                Ready to start your next project? Send us a message and let&apos;s create something amazing together.
+          <div className="grid md:grid-cols-5 gap-8">
+            {/* Left Column - Form (now wider) */}
+            <div className="md:col-span-3 relative border-8 border-white p-8">
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-yellow-400"></div>
+              <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-red-500"></div>
+              
+              <h3 className="text-3xl font-black mb-8 uppercase border-b-4 border-red-500 pb-2 inline-block">
+                SEND A MESSAGE
+              </h3>
+              
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {['name', 'email', 'message'].map((field, index) => (
+                  <div key={field} className="relative group">
+                    <label className="uppercase text-sm font-mono mb-2 block opacity-80">
+                      {field}
+                      {index === 0 && <span className="text-red-500">*</span>}
+                      {index === 1 && <span className="text-yellow-400">*</span>}
+                      {index === 2 && <span className="text-blue-500">*</span>}
+                    </label>
+                    
+                    {field === 'message' ? (
+                      <textarea
+                        value={formState[field]}
+                        onChange={(e) => setFormState(prev => ({ ...prev, [field]: e.target.value }))}
+                        rows={4}
+                        onFocus={() => setFocusedInput(field)}
+                        onBlur={() => setFocusedInput(null)}
+                        className="w-full bg-zinc-800 border-4 border-white p-4
+                                 focus:outline-none focus:border-red-500 transition-all duration-300
+                                 font-mono"
+                        style={{
+                          boxShadow: focusedInput === field ? '8px 8px 0px 0px rgba(239,68,68,1)' : 'none'
+                        }}
+                      />
+                    ) : (
+                      <input
+                        type={field === 'email' ? 'email' : 'text'} 
+                        value={formState[field as keyof typeof formState]}
+                        onChange={(e) => setFormState(prev => ({ ...prev, [field]: e.target.value }))}
+                        onFocus={() => setFocusedInput(field)}
+                        onBlur={() => setFocusedInput(null)}
+                        className="w-full bg-zinc-800 border-4 border-white p-4
+                                 focus:outline-none focus:border-red-500 transition-all duration-300
+                                 font-mono"
+                        style={{
+                          boxShadow: focusedInput === field ? '8px 8px 0px 0px rgba(239,68,68,1)' : 'none'
+                        }}
+                      />
+                    )}
+                    
+                    <div className={`absolute -bottom-1 right-0 w-4 h-4 
+                                    ${index === 0 ? 'bg-red-500' : index === 1 ? 'bg-yellow-400' : 'bg-blue-500'}
+                                    transition-opacity duration-300
+                                    ${focusedInput === field ? 'opacity-100' : 'opacity-0'}`} />
+                  </div>
+                ))}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="mt-6 bg-white text-black border-4 border-white py-4 px-8 text-xl font-black tracking-wider
+                           transition-all duration-300 relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-red-500 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0"></div>
+                  <div className="flex items-center justify-center relative z-10 group-hover:text-white transition-colors duration-300">
+                    {isSubmitting ? (
+                      <Loader2 className="animate-spin" size={24} />
+                    ) : (
+                      <>
+                        SEND IT
+                        <Send size={20} className="ml-3" />
+                      </>
+                    )}
+                  </div>
+                </button>
+              </form>
+            </div>
+
+            {/* Right Column - Social media and info */}
+            <div className="md:col-span-2 relative">
+              <div className="text-xl mb-12 font-mono relative p-6 bg-zinc-800">
+                Let&apos;s create something extraordinary together. Reach out and we&apos;ll respond within 24 hours.
+                <div className="absolute -top-3 -left-3 w-6 h-6 bg-yellow-400"></div>
+                <div className="absolute -bottom-3 -right-3 w-6 h-6 bg-red-500"></div>
               </div>
               
-              <div className="space-y-8">
-                {socialLinks.map(({ icon: Icon, href, label }) => (
+              <div className="space-y-6">
+                {socialLinks.map(({ icon: Icon, href, label, color }) => (
                   <a
                     key={label}
                     href={href}
-                    className="flex items-center group space-x-4 text-lg hover:translate-x-2 transition-transform"
+                    className="flex items-center group relative py-4 px-6"
+                    onMouseEnter={() => setActiveSocial(label)}
+                    onMouseLeave={() => setActiveSocial(null)}
                   >
-                    <Icon size={32} className="group-hover:scale-110 transition-transform" />
-                    <span className="opacity-60 group-hover:opacity-100 transition-opacity">{label}</span>
-                    <ArrowRight className="opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
+                    <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                    <div 
+                      className="w-12 h-12 flex items-center justify-center"
+                      style={{
+                        backgroundColor: activeSocial === label ? color : 'transparent',
+                        border: '3px solid white',
+                        transition: 'all 0.3s ease'
+                      }}
+                    >
+                      <Icon size={20} />
+                    </div>
+                    <span className="font-bold ml-6 tracking-wider text-lg">{label}</span>
+                    <ArrowUpRight 
+                      className="ml-auto transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" 
+                      size={20} 
+                    />
+                    
+                    <div className="absolute bottom-0 left-0 w-full h-px bg-white opacity-30"></div>
                   </a>
                 ))}
               </div>
-            </div>
-
-            {/* Contact Form */}
-            <form onSubmit={handleSubmit} className="space-y-6 relative">
-              {['name', 'email', 'message'].map((field) => (
-                <div key={field} className="relative group">
-                  {field === 'message' ? (
-                    <textarea
-                      value={formState[field]}
-                      onChange={(e) => setFormState(prev => ({ ...prev, [field]: e.target.value }))}
-                      placeholder={field.toUpperCase()}
-                      rows={4}
-                      onFocus={() => setActiveField(field)}
-                      onBlur={() => setActiveField(null)}
-                      className="w-full bg-transparent border-4 border-[#4A4A4A] p-4 text-lg 
-                               focus:outline-none focus:border-white transition-colors
-                               hover:border-opacity-75"
-                    />
-                  ) : (
-                    <input
-                      type={field === 'email' ? 'email' : 'text'} 
-                      value={formState[field as keyof typeof formState]}
-                      onChange={(e) => setFormState(prev => ({ ...prev, [field]: e.target.value }))}
-                      placeholder={field.toUpperCase()}
-                      onFocus={() => setActiveField(field)}
-                      onBlur={() => setActiveField(null)}
-                      className="w-full bg-transparent border-4 border-[#4A4A4A] p-4 text-lg 
-                               focus:outline-none focus:border-white transition-colors
-                               hover:border-opacity-75"
-                    />
-                  )}
-                  {activeField === field && (
-                    <div className="absolute -right-2 -top-2 w-4 h-4 bg-[#4A4A4A] animate-pulse" />
-                  )}
+              
+              <div className="mt-16 border-t-2 border-white pt-6 flex items-center">
+                <div className="w-12 h-12 border-3 border-white flex items-center justify-center mr-4">
+                  <Mail size={20} />
                 </div>
-              ))}
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full border-4 border-[#4A4A4A] p-4 text-xl font-bold
-                         hover:bg-[#4A4A4A] hover:text-white transition-all
-                         transform hover:-translate-y-1 hover:shadow-[4px_4px_0px_0px_rgba(74,74,74,0.2)]
-                         disabled:opacity-50 disabled:cursor-not-allowed
-                         flex items-center justify-center"
-              >
-                {isSubmitting ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  <>
-                    SEND MESSAGE
-                    <Send size={20} className="ml-2 transition-transform group-hover:translate-x-1" />
-                  </>
-                )}
-              </button>
-            </form>
+                <div>
+                  <div className="text-sm font-mono opacity-70">EMAIL US AT</div>
+                  <a href="mailto:hello@fivex.agency" className="font-bold hover:text-red-500 transition-colors">
+                    hello@fivex.agency
+                  </a>
+                </div>
+              </div>
+              
+              {/* Brutalist decorative element */}
+              <div className="absolute top-1/2 -right-4 w-2 h-32 bg-red-500"></div>
+            </div>
           </div>
         </div>
+        
+        {/* Neo-brutalist decorative elements */}
+        <Triangle className="absolute top-16 left-16 fill-blue-500 transform rotate-45" size={24} />
+        <Triangle className="absolute bottom-16 right-16 fill-red-500" size={24} />
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 px-4 border-t-4 border-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="text-lg relative group cursor-pointer">
-            © 2025 FiveX
-            <span className="ml-2 text-sm opacity-60">All rights reserved.</span>
-            <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white 
-                          group-hover:w-full transition-all duration-300" />
+      {/* Footer with brutalist styling */}
+      <footer className="py-12 px-4 bg-white text-black relative overflow-hidden">
+        <div className="absolute inset-0">
+          {Array(40).fill(null).map((_, i) => (
+            <div 
+              key={i} 
+              className="absolute w-full h-px bg-black opacity-10"
+              style={{ top: `${i * 20}px` }} 
+            />
+          ))}
+          {Array(60).fill(null).map((_, i) => (
+            <div 
+              key={`v-${i}`} 
+              className="absolute h-full w-px bg-black opacity-10"
+              style={{ left: `${i * 20}px` }} 
+            />
+          ))}
+        </div>
+        
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center relative">
+          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-12">
+            <div className="text-4xl font-black relative">
+              FIVEX
+              <div className="absolute -top-2 -left-2 text-4xl font-black text-transparent stroke-black stroke-1 opacity-20">
+                FIVEX
+              </div>
+            </div>
+            
+            <div className="font-mono text-sm opacity-70 border-l-4 border-red-500 pl-4">
+              BRUTALIST DESIGN STUDIO<br />
+              SINCE 2025
+            </div>
           </div>
           
-          <a href="mailto:hello@fivex.agency" 
-             className="mt-4 md:mt-0 flex items-center hover:text-[#40E0D0] transition-colors group">
-            <Mail className="mr-2 group-hover:scale-110 transition-transform" />
-            hello@fivex.agency
-            <ExternalLink size={16} className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </a>
+          <div className="mt-8 md:mt-0 flex items-center space-x-6">
+            <div className="text-xs font-mono opacity-70">© 2025 ALL RIGHTS RESERVED</div>
+            <div className="w-2 h-2 bg-red-500"></div>
+            <a href="#" className="font-bold underline underline-offset-4 hover:text-red-500 transition-colors">
+              PRIVACY
+            </a>
+            <div className="w-2 h-2 bg-black"></div>
+            <a href="#" className="font-bold underline underline-offset-4 hover:text-red-500 transition-colors">
+              TERMS
+            </a>
+          </div>
         </div>
 
-        {/* Decorative corner elements */}
-        <div className="absolute top-0 right-0 w-16 h-16 border-l-4 border-b-4 border-white opacity-20" />
-        <div className="absolute bottom-0 left-0 w-16 h-16 border-t-4 border-r-4 border-white opacity-20" />
+        {/* Brutalist decorative elements */}
+        <div className="absolute top-0 left-0 w-20 h-6 bg-red-500" />
+        <div className="absolute bottom-0 right-0 w-6 h-20 bg-yellow-400" />
+        <Circle className="absolute bottom-8 left-1/2 fill-black opacity-20" size={12} />
       </footer>
     </>
   );
