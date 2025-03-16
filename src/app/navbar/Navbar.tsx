@@ -1,21 +1,61 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Menu, X, ChevronRight, Square } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Menu, X, ArrowUpRight, Triangle, Circle, Minus, Plus } from 'lucide-react';
 import { useScrollToSection } from '@/components/hooks/useScrollToSection';
 
 export default function Navbar() {
   const { scrollToSection, isOpen, setIsOpen } = useScrollToSection();
-  const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('');
-  const [hoverIndex, setHoverIndex] = useState(-1);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeSection, setActiveSection] = useState('hero');
+  const [hoverItem, setHoverItem] = useState<string | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
+  // Track scroll position and direction
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const currentScrollY = window.scrollY;
+      
+      // Calculate scroll progress percentage for indicator
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (currentScrollY / scrollHeight) * 100;
+      setScrollProgress(progress);
+      
+      // Hide/show navbar based on scroll direction
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
     };
+    
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
+
+  // Intersection Observer to detect active section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    
+    const sections = document.querySelectorAll('section[id]');
+    sections.forEach((section) => observer.observe(section));
+    
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, []);
 
   const handleNavClick = (sectionId: string) => {
@@ -25,135 +65,234 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { id: 'services', label: 'SERVICES' },
-    { id: 'work', label: 'WORK' },
-    { id: 'contact', label: 'CONTACT' }
+    { id: 'hero', label: 'HOME', color: '#FF3366' },
+    { id: 'services', label: 'SERVICES', color: '#40E0D0' },
+    { id: 'work', label: 'WORK', color: '#FFD700' },
+    { id: 'contact', label: 'CONTACT', color: '#6e5494' }
   ];
 
   return (
-    <nav className={`fixed w-full top-0 z-50 transition-all duration-300 border-b-4 border-black
-                    ${scrolled ? 'shadow-[0_8px_0px_rgba(0,0,0,0.2)]' : ''}`}>
-      {/* Raw grid element */}
-      <div className="h-2 w-full bg-yellow-400 relative overflow-hidden">
-        <div className="absolute inset-0 grid grid-cols-12 gap-px">
-          {Array(12).fill(null).map((_, i) => (
-            <div key={i} className={`h-full ${i % 3 === 0 ? 'bg-black bg-opacity-20' : ''}`} />
+    <div 
+      ref={navRef}
+      className={`fixed w-full z-50 transition-all duration-500 ${isVisible ? 'top-0' : '-top-full'}`}
+    >
+      {/* Top visual pattern bar */}
+      <div className="h-3 w-full bg-black relative overflow-hidden">
+        <div className="flex">
+          {Array(40).fill(null).map((_, i) => (
+            <div 
+              key={i} 
+              className="h-full flex-1"
+              style={{ 
+                backgroundColor: i % 5 === 0 ? '#FF3366' : 
+                              i % 5 === 1 ? '#40E0D0' : 
+                              i % 5 === 2 ? '#FFD700' : 
+                              i % 5 === 3 ? '#6e5494' : 'transparent'
+              }} 
+            />
           ))}
         </div>
       </div>
       
-      <div className={`bg-white transition-all duration-300 relative
-                      ${scrolled ? 'bg-opacity-95' : ''}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Main navbar */}
+      <div className="bg-white relative border-b-8 border-black">
+        {/* Progress bar */}
+        <div 
+          className="h-2 bg-red-500 absolute bottom-0 left-0 z-10" 
+          style={{ width: `${scrollProgress}%` }}
+        />
+        
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            {/* Neo-brutalist Logo */}
+            {/* Logo with animation */}
             <div 
-              className="relative group cursor-pointer"
+              className="group cursor-pointer relative"
               onClick={() => scrollToSection('hero')}
             >
-              <span className="text-3xl font-black tracking-tighter relative z-10 
-                           group-hover:-translate-y-1 group-hover:translate-x-1 inline-block
-                           transition-transform duration-300">
-                FIVEX
-              </span>
-              <div className="absolute -right-1 -bottom-1 w-8 h-8 bg-red-500 -z-10
-                          opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="text-4xl font-black relative inline-block">
+                <span className="relative z-20 group-hover:text-white transition-colors duration-300">
+                  FIVEX
+                </span>
+                <div className="absolute inset-0 z-10 bg-black transform scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-300"/>
+                <div className="absolute -bottom-1 -right-1 z-0 w-4 h-4 bg-yellow-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
+              </div>
+              <Triangle className="absolute -top-2 -left-2 fill-red-500 opacity-0 group-hover:opacity-100 transition-opacity" size={12}/>
             </div>
             
-            {/* Mobile menu button with brutalist style */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className={`p-3 transition-all relative
-                         ${isOpen ? 'bg-black text-white' : 'border-2 border-black'}`}
-              >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+            {/* Mobile toggle with animation */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden relative p-3 border-4 border-black group overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-black transform scale-y-0 group-hover:scale-y-100 origin-bottom transition-transform duration-300 z-0"/>
+              {isOpen ? (
+                <X size={24} className="relative z-10 group-hover:text-white transition-colors duration-300"/>
+              ) : (
+                <Menu size={24} className="relative z-10 group-hover:text-white transition-colors duration-300"/>
+              )}
+            </button>
 
-            {/* Desktop menu with brutalist styling */}
-            <div className="hidden md:flex space-x-4 text-lg font-bold">
-              {navItems.map(({ id, label }, index) => (
-                <button 
-                  key={id}
-                  onClick={() => handleNavClick(id)}
-                  onMouseEnter={() => setHoverIndex(index)}
-                  onMouseLeave={() => setHoverIndex(-1)}
-                  className={`relative px-4 py-2 
-                            ${activeSection === id 
-                              ? 'bg-black text-white' 
-                              : 'hover:bg-black hover:text-white'
-                            }
-                            transition-colors duration-200`}
-                >
-                  <span className="relative z-10">{label}</span>
+            {/* Desktop menu */}
+            <div className="hidden md:flex items-center">
+              <div className="flex space-x-1">
+                {navItems.map(({ id, label, color }) => {
+                  const isActive = activeSection === id;
+                  const isHovered = hoverItem === id;
                   
-                  {/* Decorative elements that appear on hover */}
-                  {hoverIndex === index && (
-                    <div className="absolute -right-1 -bottom-1 w-2 h-8 bg-red-500" />
-                  )}
-                  
-                  {activeSection === id && (
-                    <Square 
-                      className="absolute -right-3 -top-1 fill-yellow-400" 
-                      size={10} 
-                    />
-                  )}
-                </button>
-              ))}
+                  return (
+                    <div className="relative" key={id}>
+                      <button 
+                        onClick={() => handleNavClick(id)}
+                        onMouseEnter={() => setHoverItem(id)}
+                        onMouseLeave={() => setHoverItem(null)}
+                        className="px-6 py-3 font-bold transition-all duration-300 relative overflow-hidden group"
+                      >
+                        {/* Background fills on hover/active */}
+                        <div 
+                          className={`absolute inset-0 transition-transform duration-300 z-0
+                                    ${isActive ? 'bg-black' : ''}
+                                    ${!isActive && isHovered ? 'bg-zinc-100' : ''}`}
+                        />
+                        
+                        {/* Label with conditional styling */}
+                        <span 
+                          className={`relative z-10 transition-colors duration-300
+                                    ${isActive ? 'text-white' : 'text-black'}`}
+                        >
+                          {label}
+                        </span>
+                        
+                        {/* Active indicator line */}
+                        {isActive && (
+                          <div 
+                            className="absolute bottom-0 left-0 h-1 w-full" 
+                            style={{ backgroundColor: color }}
+                          />
+                        )}
+                        
+                        {/* Active indicator dot */}
+                        {isActive && (
+                          <div 
+                            className="absolute -right-1 -top-1 w-3 h-3 z-20" 
+                            style={{ backgroundColor: color }}
+                          />
+                        )}
+                        
+                        {/* Hover indicator */}
+                        {isHovered && !isActive && (
+                          <div className="absolute bottom-0 left-0 h-1 w-full bg-zinc-300" />
+                        )}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+              
+              {/* CTA button */}
+              <button 
+                onClick={() => handleNavClick('contact')}
+                className="ml-8 px-6 py-3 bg-black text-white font-bold relative group overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center">
+                  GET IN TOUCH
+                  <ArrowUpRight 
+                    size={16} 
+                    className="ml-2 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300"
+                  />
+                </span>
+                <div className="absolute inset-0 bg-red-500 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-0"/>
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile menu with brutalist aesthetic */}
+        {/* Mobile menu with animation */}
         <div 
-          className={`md:hidden transition-all duration-300 ease-in-out absolute w-full bg-white
-                    ${isOpen ? 'max-h-screen opacity-100 border-t-2 border-black' : 'max-h-0 opacity-0 overflow-hidden'}`}
+          className={`md:hidden transition-all duration-500 absolute w-full bg-white border-t-4 border-black overflow-hidden
+                    ${isOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
         >
           <div className="relative">
-            {/* Decorative element */}
+            {/* Decorative patterns for mobile menu */}
             {isOpen && (
-              <div className="absolute top-0 left-0 w-2 h-full bg-yellow-400"></div>
+              <>
+                <div className="absolute top-0 left-0 w-1 h-full bg-black"/>
+                <div className="absolute -left-4 top-1/3 w-8 h-8 bg-yellow-400 rounded-full opacity-20"/>
+                <div className="absolute -right-4 bottom-1/3 w-12 h-2 bg-red-500 opacity-30"/>
+              </>
             )}
             
-            {navItems.map(({ id, label }, index) => (
+            {navItems.map(({ id, label, color }, index) => {
+              const isActive = activeSection === id;
+              
+              return (
+                <div key={id} className="relative">
+                  <button 
+                    onClick={() => handleNavClick(id)}
+                    className={`block w-full text-left p-6 font-bold
+                              border-b border-zinc-200 relative
+                              ${isActive ? 'bg-zinc-100' : ''}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        {/* Number prefix */}
+                        <span 
+                          className="mr-4 opacity-50 font-mono text-sm"
+                          style={{ color: isActive ? color : 'inherit' }}
+                        >
+                          0{index + 1}
+                        </span>
+                        
+                        {/* Label */}
+                        <span className="text-xl">{label}</span>
+                      </div>
+                      
+                      {/* Active/inactive indicators */}
+                      {isActive ? (
+                        <Minus size={16} style={{ color }} />
+                      ) : (
+                        <Plus size={16} />
+                      )}
+                    </div>
+                    
+                    {/* Active indicator bar */}
+                    {isActive && (
+                      <div 
+                        className="absolute left-0 top-0 h-full w-1"
+                        style={{ backgroundColor: color }}
+                      />
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+            
+            {/* Mobile CTA button */}
+            <div className="p-6">
               <button 
-                key={id}
-                onClick={() => handleNavClick(id)}
-                className={`block w-full text-left px-8 py-6 text-xl font-black
-                         hover:bg-black hover:text-white transition-colors
-                         flex items-center justify-between relative
-                         ${activeSection === id ? 'bg-black text-white' : ''}`}
+                onClick={() => handleNavClick('contact')}
+                className="w-full py-4 bg-black text-white font-bold flex items-center justify-center relative overflow-hidden group"
               >
-                <span>{label}</span>
-                
-                {/* Different decorative element for each item */}
-                {index === 0 && (
-                  <div className="absolute right-0 top-0 w-3 h-3 bg-red-500"></div>
-                )}
-                {index === 1 && (
-                  <div className="absolute right-0 top-0 w-6 h-1 bg-blue-600"></div>
-                )}
-                {index === 2 && (
-                  <Square className="absolute right-0 top-0 fill-yellow-400" size={12} />
-                )}
-                
-                <ChevronRight className="ml-2 transition-all" />
+                <span className="relative z-10 flex items-center">
+                  GET IN TOUCH
+                  <ArrowUpRight size={18} className="ml-2" />
+                </span>
+                <div className="absolute inset-0 bg-red-500 transform translate-x-full group-hover:translate-x-0 transition-transform duration-300 z-0"/>
               </button>
-            ))}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Raw scroll progress indicator */}
-      <div className="h-1 bg-black absolute bottom-0 left-0 transition-all duration-300"
-           style={{ width: `${scrolled ? '100%' : '0%'}` }} />
       
       {/* Brutalist decorative elements */}
-      <div className={`absolute -bottom-2 left-8 w-4 h-4 bg-blue-600 transition-all duration-500
-                      ${scrolled ? 'opacity-100' : 'opacity-0'}`}></div>
-      <div className={`absolute -bottom-3 right-12 w-6 h-2 bg-red-500 transition-all duration-500
-                      ${scrolled ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}></div>
-    </nav>
+      <Circle 
+        className={`absolute -bottom-3 left-1/4 fill-yellow-400 transition-all duration-500
+                  ${scrollProgress > 10 ? 'opacity-100' : 'opacity-0'}`}
+        size={12}
+      />
+      <div 
+        className={`absolute -bottom-4 right-1/3 w-8 h-2 bg-red-500 transition-all duration-500
+                  ${scrollProgress > 30 ? 'opacity-100' : 'opacity-0 translate-y-4'}`}
+      />
+    </div>
   );
 }
